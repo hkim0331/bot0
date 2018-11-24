@@ -3,7 +3,7 @@
 # 2018-10-10, old filename was hrm.rb.
 # 2018-11-24, [CREATE] /form and /push
 
-VERSION = "0.2.2.2"
+VERSION = "0.2.3"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -127,6 +127,12 @@ end
 
 get '/exec-push' do
   req = params.slice 'user','msg'
+  if req['user'].nil?
+    return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
+  end
+  if req['msg'].nil?
+    return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
+  end
   m = MSGS.where(id: req['msg'].to_i).first[:msg]
   json = JSON.parse(m)
   ret=""
