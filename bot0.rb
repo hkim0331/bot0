@@ -24,7 +24,7 @@ push_to = [ kimura, okamura, ishii ]
 
 class Hash
   def slice(*whitelist)
-    whitelist.inject{}{|result,key| result.merge(key=> self[key])}
+    whitelist.inject({}){|result,key| result.merge(key=> self[key])}
   end
 end
 
@@ -59,25 +59,24 @@ def db_save(name, value)
 end
 
 post '/push' do
-    id = params.slice "id"
-    puts "id: #{id}"
-    msg = MSGS.where(id: id)[:msg]
-    puts "msg: #{msg}"
-    json = JSON.parse(msg)
-    if msg.null?
-      "json error"
+    req = params.slice "id"
+    id = req["id"].to_i
+    m = MSGS.where(id: id).first[:msg]
+    json = JSON.parse(m)
+    if json.nil?
+      "<p>json error</p>"
     else
       USERS.each do |user|
-        client.push_message(user[:uid], msg)
+        client.push_message(user[:uid], json)
       end
-      "sent"
+      "<p>sent. <a href='/form'>back</a></p>"
     end
 end
 
 get '/form' do
   ret="<form method='post' action='/push'><h2>Select message</h2>"
   MSGS.each do |m|
-    ret << "<p><input type='radio' name='msg' value='#{m[:id]}'>
+    ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
     #{m[:timestamp]}
     #{m[:comment]}:
     #{m[:msg][0..50]}</p>"
