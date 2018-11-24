@@ -1,0 +1,230 @@
+{
+  "type": "template",
+         "altText": "this is a carousel template",
+         "template": {
+                       "type": "carousel",
+                      "actions": [],
+                      "columns": [
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   },
+                                   {
+                                     "thumbnailImageUrl": "SPECIFY_YOUR_IMAGE_URL",
+                                    "title": "タイトル",
+                                    "text": "テキスト",
+                                    "actions": [
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 1",
+                                                  "text": "アクション 1"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 2",
+                                                  "text": "アクション 2"
+                                                 },
+                                                 {
+                                                   "type": "message",
+                                                  "label": "アクション 3",
+                                                  "text": "アクション 3"
+                                                 }
+                                               ]
+                                   }
+                                 ]
+                     }
+}

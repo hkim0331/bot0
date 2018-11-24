@@ -1,0 +1,23 @@
+{
+  "size": {
+            "width": 2500,
+           "height": 1686
+          },
+        "selected": true,
+        "name": "リッチメニュー 1",
+        "chatBarText": "お知らせ",
+        "areas": [
+                   {
+                     "bounds": {
+                                 "x": 965,
+                                "y": 317,
+                                "width": 20,
+                                "height": 355
+                               },
+                    "action": {
+                                "type": "uri",
+                               "uri": "http://www.judo.or.jp/p/45624"
+                              }
+                   }
+                 ]
+}

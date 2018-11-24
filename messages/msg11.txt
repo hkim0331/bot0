@@ -1,0 +1,46 @@
+{
+  "type": "template",
+         "altText": "this is a buttons template",
+         "template": {
+                       "type": "buttons",
+                      "actions": [
+                                   {
+                                     "type": "message",
+                                    "label": "非常にきつい",
+                                    "text": "20"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "きつい",
+                                    "text": "15"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "ちょいきつい",
+                                    "text": "14"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "普通",
+                                    "text": "13"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "何個でも",
+                                    "text": "12"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "楽である",
+                                    "text": "11"
+                                   },
+                                   {
+                                     "type": "message",
+                                    "label": "非常に楽である",
+                                    "text": "7"
+                                   }
+                                 ],
+                      "title": "今日の稽古の運動強度は？",
+                      "text": "主観的運動強度（RPE）"
+                     }
+}
