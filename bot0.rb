@@ -2,7 +2,7 @@
 # 2018-10-10, old filename was hrm.rb.
 # [CREATE] /form and /push
 
-VERSION = "0.2.1"
+VERSION = "0.2.2"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -12,6 +12,7 @@ DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
   password: ENV["BOT_PASSWORD"],
   host: 'localhost')
+
 DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
@@ -59,10 +60,34 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
+post '/add-receiver' do
+  req = params.slice "name", "uid"
+  USERS.insert(name: req["name"], uid: req["uid"])
+  "<p>added. <a href='/form'>back</a></p>"
+
+end
+
+get '/add-receiver' do
+  ret = "<h2>Add Receiver #{VERSION}</h2>"
+  ret << "<p>LINE の ID が必要です。</p>"
+  ret << "<form method='post' action=/add-receiver>"
+  ret << "name: <input type='text' name='name'><br>"
+  ret << "uid:  <input type='text' name='uid'><br>"
+  ret << "<input type='submit' value='add'></form>"
+end
+
+get '/receivers' do
+  ret = "<table>"
+  USERS.each do |user|
+    ret << "<tr><td>#{user[:name]}</td><td>#{user[:uid]}</td></tr>"
+  end
+  ret << "</table>"
+  ret << "<form action=/add-receiver><button>add...</button></form>"
+end
+
 get '/push' do
   req = params.slice "id"
-  id = req["id"].to_i
-  m = MSGS.where(id: id).first[:msg]
+  m = MSGS.where(id: req["id"].to_i).first[:msg]
   json = JSON.parse(m)
   if json.nil?
     "<p>json error</p>"
@@ -76,21 +101,19 @@ end
 
 post '/create-msg' do
   req = params.slice "comment", "msg"
-  comment = req["comment"]
-  msg = req["msg"]
-  MSGS.insert(comment: comment, msg: msg)
+  MSGS.insert(comment: req["comment"], msg: req["msg"])
   "<p>added. <a href='/form'>back</a></p>"
 end
 
 get '/create-msg' do
-  ret = "<h2>Add Message</h2><form method='post' action=/create-msg>"
+  ret = "<h2>Add Message #{VERSION}</h2><form method='post' action=/create-msg>"
   ret << "comment: <input type='text' name='comment'><br>"
   ret << "<textarea name='msg' rows='30' cols='40'></textarea><br>"
   ret << "<input type='submit' value='add'></form>"
 end
 
 get '/form' do
-  ret = "<form action='/push'><h2>Select message #{VERSION}</h2>"
+  ret = "<form action='/push'><h2>Select/Push/Add Message #{VERSION}</h2>"
   MSGS.each do |m|
     ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
     #{m[:timestamp]}
@@ -154,7 +177,7 @@ post '/callback' do
   "OK"
 end
 
-get "/" do
+get "/data" do
   ret = []
   DATA.reverse.each do |r|
     ret.push "<p>#{r[:timestamp]} #{r[:name]} #{r[:hb]}</p>"
@@ -171,25 +194,6 @@ Thread.new do
                                    text: "８時だよ。博論頑張れ。さーやはスキー頑張れ"})
       end
     end
-
-    ## ng
-    # if now =~ /0$/
-    #   push_to.each do |user|
-    #     client.push_message(user, msg1)
-    #   end
-    # end
-    #
-    # ng
-    # push_to.each do |user|
-    #   client.push_message(user, msg2)
-    # end
-    # puts "sent #{now}"
-    #
-    ## goes well.
-    #push_to.each do |user|
-    #  client.push_message(user, msg7)
-    #end
-    #
     sleep(60)
   end
 end
