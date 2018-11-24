@@ -3,6 +3,7 @@ Description=Bot0 app
 
 [Service]
 WorkingDirectory=/srv/bot0
+EnvironmentFile=/srv/bot0/.env
 ExecStart=ruby bot0.rb -e production
 Restart=always
 TimeOutSec=300

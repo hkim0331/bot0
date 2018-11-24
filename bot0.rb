@@ -2,7 +2,7 @@
 # 2018-10-10, old filename was hrm.rb.
 # [CREATE] /form and /push
 
-VERSION = "0.2.0"
+VERSION = "0.2.1"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -60,22 +60,37 @@ def db_save(name, value)
 end
 
 get '/push' do
-    req = params.slice "id"
-    id = req["id"].to_i
-    m = MSGS.where(id: id).first[:msg]
-    json = JSON.parse(m)
-    if json.nil?
-      "<p>json error</p>"
-    else
-      USERS.each do |user|
-        client.push_message(user[:uid], json)
-      end
-      "<p>sent. <a href='/form'>back</a></p>"
+  req = params.slice "id"
+  id = req["id"].to_i
+  m = MSGS.where(id: id).first[:msg]
+  json = JSON.parse(m)
+  if json.nil?
+    "<p>json error</p>"
+  else
+    USERS.each do |user|
+      client.push_message(user[:uid], json)
     end
+    "<p>sent. <a href='/form'>back</a></p>"
+  end
+end
+
+post '/create-msg' do
+  req = params.slice "comment", "msg"
+  comment = req["comment"]
+  msg = req["msg"]
+  MSGS.insert(comment: comment, msg: msg)
+  "<p>added. <a href='/form'>back</a></p>"
+end
+
+get '/create-msg' do
+  ret = "<h2>Add Message</h2><form method='post' action=/create-msg>"
+  ret << "comment: <input type='text' name='comment'><br>"
+  ret << "<textarea name='msg' rows='30' cols='40'></textarea><br>"
+  ret << "<input type='submit' value='add'></form>"
 end
 
 get '/form' do
-  ret="<form action='/push'><h2>Select message</h2>"
+  ret = "<form action='/push'><h2>Select message #{VERSION}</h2>"
   MSGS.each do |m|
     ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
     #{m[:timestamp]}
@@ -83,6 +98,7 @@ get '/form' do
     #{m[:msg][0..50]}</p>"
   end
   ret << "<input type='submit' value='push'></form>"
+  ret << "<form action=/create-msg><button>add...</button></form>"
 end
 
 post '/callback' do
