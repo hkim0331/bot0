@@ -2,7 +2,7 @@
 # 2018-10-10, old filename was hrm.rb.
 # [CREATE] /form and /push
 
-VERSION = "0.2.2"
+VERSION = "0.2.2.1"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -180,9 +180,13 @@ end
 get "/data" do
   ret = []
   DATA.reverse.each do |r|
-    ret.push "<p>#{r[:timestamp]} #{r[:name]} #{r[:hb]}</p>"
+    ret.push "#{r[:timestamp]} #{r[:name]} #{r[:hb]}<br>"
   end
   ret.join.to_s
+end
+
+get "/" do
+  redirect "/index.html"
 end
 
 Thread.new do
