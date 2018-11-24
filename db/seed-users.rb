@@ -2,7 +2,11 @@
 
 require 'sequel'
 
-USERS = Sequel.mysql2("bot0", user: 'user', password: 'password', host: 'localhost')[:USERS]
+DB = Sequel.mysql2("bot0",
+  user: ENV["BOT_USER"],
+  password: ENV["BOT_PASSWORD"],
+  host: 'localhost')
+USERS = DB[:users]
 
 File.foreach("users.txt") do |line|
   name, uid = line.chomp.split

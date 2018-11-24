@@ -7,14 +7,26 @@ require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
 require 'sequel'
 
-DB = Sequel.mysql2("bot0", user: 'user', password: 'password', host: 'localhost')
-DATA = DB[:data]
+DB = Sequel.mysql2("bot0",
+  user: ENV["BOT_USER"],
+  password: ENV["BOT_PASSWORD"],
+  host: 'localhost')
+DATA  = DB[:data]
+USERS = DB[:users]
+MSGS  = DB[:msgs]
 
+# better from DB[:users]
 kimura  = "U583b8f1e145218b0f4358c8d2519357d"
 okamura = "Ue2bf7adb6b6e114e072d81ad42742597"
 ishii   = "U7863b8ba9f247ed2233304a7e9c7a99c"
 
 push_to = [ kimura, okamura, ishii ]
+
+class Hash
+  def slice(*whitelist)
+    whitelist.inject{}{|result,key| result.merge(key=> self[key])}
+  end
+end
 
 def ask_avg(name)
   DB["select avg(hb) from data where name = ?", name].first[:"avg(hb)"].round
@@ -31,7 +43,6 @@ def client
   }
 end
 
-
 def displayName(user_id)
   response = client.get_profile(user_id)
   contact = JSON.parse(response.body)
@@ -47,8 +58,31 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
-get '/hello' do
-  "<h1>hello, bot0</h1>"
+post '/push' do
+    id = params.slice "id"
+    puts "id: #{id}"
+    msg = MSGS.where(id: id)[:msg]
+    puts "msg: #{msg}"
+    json = JSON.parse(msg)
+    if msg.null?
+      "json error"
+    else
+      USERS.each do |user|
+        client.push_message(user[:uid], msg)
+      end
+      "sent"
+    end
+end
+
+get '/form' do
+  ret="<form method='post' action='/push'><h2>Select message</h2>"
+  MSGS.each do |m|
+    ret << "<p><input type='radio' name='msg' value='#{m[:id]}'>
+    #{m[:timestamp]}
+    #{m[:comment]}:
+    #{m[:msg][0..50]}</p>"
+  end
+  ret << "<input type='submit' value='push'></form>"
 end
 
 post '/callback' do

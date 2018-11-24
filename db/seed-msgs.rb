@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
 
 require 'sequel'
-MSGS = Sequel.mysql2("bot0", user: 'user', password: 'password', host: 'localhost')[:MSGS]
+
+DB = Sequel.mysql2("bot0",
+  user: ENV["BOT_USER"],
+  password: ENV["BOT_PASSWORD"],
+  host: 'localhost')
+MSGS = DB[:msgs]
 
 Dir.glob("../messages/*.txt").each do |file|
   comment = File.basename(file).sub(/\.txt$/,'')
