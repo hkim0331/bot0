@@ -1,7 +1,8 @@
 # coding: utf-8
 # 2018-10-10, old filename was hrm.rb.
+# [CREATE] /form and /push
 
-VERSION = "0.1"
+VERSION = "0.2.0"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -58,7 +59,7 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
-post '/push' do
+get '/push' do
     req = params.slice "id"
     id = req["id"].to_i
     m = MSGS.where(id: id).first[:msg]
@@ -74,7 +75,7 @@ post '/push' do
 end
 
 get '/form' do
-  ret="<form method='post' action='/push'><h2>Select message</h2>"
+  ret="<form action='/push'><h2>Select message</h2>"
   MSGS.each do |m|
     ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
     #{m[:timestamp]}
