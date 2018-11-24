@@ -1,0 +1,13 @@
+[Unit]
+Description=Bot0 app
+
+[Service]
+WorkingDirectory=/srv/bot0
+ExecStart=ruby bot0.rb -e production
+Restart=always
+TimeOutSec=300
+Type=simple
+User=ubuntu
+
+[Install]
+WantedBy=multi-user.target
