@@ -64,7 +64,7 @@ end
 post '/add-receiver' do
   req = params.slice "name", "uid"
   USERS.insert(name: req["name"], uid: req["uid"])
-  "<p>added. <a href='/form'>back</a></p>"
+  "<p>added. <a href='/push-test'>back</a></p>"
 
 end
 
@@ -77,14 +77,14 @@ get '/add-receiver' do
   ret << "<input type='submit' value='add'></form>"
 end
 
-get '/receivers' do
-  ret = "<table>"
-  USERS.each do |user|
-    ret << "<tr><td>#{user[:name]}</td><td>#{user[:uid]}</td></tr>"
-  end
-  ret << "</table>"
-  ret << "<form action=/add-receiver><button>add...</button></form>"
-end
+# get '/receivers' do
+#   ret = "<table>"
+#   USERS.each do |user|
+#     ret << "<tr><td>#{user[:name]}</td><td>#{user[:uid]}</td></tr>"
+#   end
+#   ret << "</table>"
+#   ret << "<form action=/add-receiver><button>add...</button></form>"
+# end
 
 get '/push' do
   req = params.slice "id"
@@ -96,34 +96,34 @@ get '/push' do
     USERS.each do |user|
       client.push_message(user[:uid], json)
     end
-    "<p>sent. <a href='/form'>back</a></p>"
+    "<p>sent. <a href='/push-test'>back</a></p>"
   end
 end
 
-post '/create-msg' do
+post '/add-msg' do
   req = params.slice "comment", "msg"
   MSGS.insert(comment: req["comment"], msg: req["msg"])
-  "<p>added. <a href='/form'>back</a></p>"
+  "<p>added. <a href='/push-test'>back</a></p>"
 end
 
-get '/create-msg' do
-  ret = "<h2>Add Message #{VERSION}</h2><form method='post' action=/create-msg>"
+get '/add-msg' do
+  ret = "<h2>Add Message #{VERSION}</h2><form method='post' action=/add-msg>"
   ret << "comment: <input type='text' name='comment'><br>"
   ret << "<textarea name='msg' rows='30' cols='40'></textarea><br>"
   ret << "<input type='submit' value='add'></form>"
 end
 
-get '/form' do
-  ret = "<form action='/push'><h2>Select/Push/Add Message #{VERSION}</h2>"
-  MSGS.each do |m|
-    ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
-    #{m[:timestamp]}
-    #{m[:comment]}:
-    #{m[:msg][0..50]}</p>"
-  end
-  ret << "<input type='submit' value='push'></form>"
-  ret << "<form action=/create-msg><button>add...</button></form>"
-end
+# get '/form' do
+#   ret = "<form action='/push'><h2>Select/Push/Add Message #{VERSION}</h2>"
+#   MSGS.each do |m|
+#     ret << "<p><input type='radio' name='id' value='#{m[:id]}'>
+#     #{m[:timestamp]}
+#     #{m[:comment]}:
+#     #{m[:msg][0..50]}</p>"
+#   end
+#   ret << "<input type='submit' value='push'></form>"
+#   ret << "<form action=/create-msg><button>add...</button></form>"
+# end
 
 get '/exec-push' do
   req = params.slice 'user','msg'
@@ -141,12 +141,11 @@ get '/exec-push' do
     client.push_message(uid, json)
     ret << "#{uid} #{json}"
   end
-  #  ret
   "<p>sent. <a href='/push-test'>back</a></p>"
 end
 
 get '/push-test' do
-  ret = "<h2>push test</h2>"
+  ret = "<h2>PUSH test</h2>"
   ret << "<form action='/exec-push'>"
   ret << "<h3>Receivers</h3>"
   USERS.each do |u|
@@ -158,15 +157,15 @@ get '/push-test' do
   MSGS.each do |m|
     ret << "<input type='radio' name='msg' value='#{m[:id]}'>#{m[:comment]}<br>"
   end
-  ret << "<p><a href='/create-msg'>add...</a></p>"
+  ret << "<p><a href='/add-msg'>add...</a></p>"
 
   ret << "<h3>Timing Push</h3>"
+  ret << "<p>2018-11-24, one shot だけです。</p>"
   ret << "<input type='radio' name='timing' checked='checked'>one shot<br>"
   ret << "<input type='radio' disabled='disabled'> every <input size='4'> seconds<br>"
   ret << "<input type='radio' disabled='disabled'> at <input size='2'>:<input size='2'><br>"
   ret << "<p><input type='submit' value='PUSH'></p></form>"
 end
-
 
 post '/callback' do
   body = request.body.read
