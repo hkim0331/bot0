@@ -2,12 +2,13 @@
 #
 # 2018-10-10, old filename was hrm.rb.
 # 2018-11-24, [CREATE] /form and /push
+#             [CREATE] views
 
-VERSION = "0.2.3"
+VERSION = "0.2.4"
 
-require 'sinatra'   # gem install 'sinatra'
-require 'line/bot'  # gem install 'line-bot-api'
-require 'sequel'
+require 'sinatra'   # gem install sinatra
+require 'line/bot'  # gem install line-bot-api
+require 'sequel'    # gem install seqlel mysql2
 
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
