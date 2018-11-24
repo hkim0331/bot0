@@ -1,8 +1,9 @@
 # coding: utf-8
+#
 # 2018-10-10, old filename was hrm.rb.
-# [CREATE] /form and /push
+# 2018-11-24, [CREATE] /form and /push
 
-VERSION = "0.2.2.1"
+VERSION = "0.2.2.2"
 
 require 'sinatra'   # gem install 'sinatra'
 require 'line/bot'  # gem install 'line-bot-api'
@@ -124,6 +125,43 @@ get '/form' do
   ret << "<form action=/create-msg><button>add...</button></form>"
 end
 
+get '/exec-push' do
+  req = params.slice 'user','msg'
+  m = MSGS.where(id: req['msg'].to_i).first[:msg]
+  json = JSON.parse(m)
+  ret=""
+  req['user'].each do |u|
+    uid = USERS.where(id: u).first[:uid]
+    client.push_message(uid, json)
+    ret << "#{uid} #{json}"
+  end
+  #  ret
+  "<p>sent. <a href='/push-test'>back</a></p>"
+end
+
+get '/push-test' do
+  ret = "<h2>push test</h2>"
+  ret << "<form action='/exec-push'>"
+  ret << "<h3>Receivers</h3>"
+  USERS.each do |u|
+    ret << "<input type='checkbox' name='user[]' value='#{u[:id]}' checked='checked'>#{u[:name]}<br>"
+  end
+  ret << "<p><a href='/add-receiver'>add...</a></p>"
+
+  ret << "<h3>Message</h3>"
+  MSGS.each do |m|
+    ret << "<input type='radio' name='msg' value='#{m[:id]}'>#{m[:comment]}<br>"
+  end
+  ret << "<p><a href='/create-msg'>add...</a></p>"
+
+  ret << "<h3>Timing Push</h3>"
+  ret << "<input type='radio' name='timing' checked='checked'>one shot<br>"
+  ret << "<input type='radio' disabled='disabled'> every <input size='4'> seconds<br>"
+  ret << "<input type='radio' disabled='disabled'> at <input size='2'>:<input size='2'><br>"
+  ret << "<p><input type='submit' value='PUSH'></p></form>"
+end
+
+
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
@@ -162,15 +200,17 @@ post '/callback' do
 
         # push test
         push_to.each do |dest|
-          client.push_message(dest, {type: 'text',
-                                     text: "BOT0 got #{event.message['text']} from #{name}"})
+          client.push_message(
+            dest,
+            {type: 'text', text: "BOT0 got: #{event.message['text']} from #{name}"})
         end
         # push test end
 
-        # web の画面
-        File.open("public/index.html","a") do |fp|
-          fp.puts "<p>#{Time.now} #{name} #{value}</p>"
-        end
+        # # web の画面
+        # off 2018-11-24
+        # File.open("public/index.html","a") do |fp|
+        #   fp.puts "<p>#{Time.now} #{name} #{value}</p>"
+        # end
       end
     end
   }
