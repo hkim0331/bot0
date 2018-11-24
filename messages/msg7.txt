@@ -1,0 +1,274 @@
+{
+  "type": "flex",
+      "altText": "Flex Message",
+      "contents": {
+                    "type": "carousel",
+                   "contents": [
+                                 {
+                                   "type": "bubble",
+                                  "header": {
+                                              "type": "box",
+                                             "layout": "horizontal",
+                                             "contents": [
+                                                           {
+                                                             "type": "text",
+                                                            "text": "JUDO NEWS",
+                                                            "flex": 10,
+                                                            "size": "md",
+                                                            "weight": "bold",
+                                                            "color": "#AAAAAA"
+                                                           }
+                                                         ]
+                                            },
+                                  "hero": {
+                                            "type": "image",
+                                           "url": "https://static.wixstatic.com/media/0fcc93_64f49d80d444475f8b9d14c5324dbdc2~mv2_d_4320_3240_s_4_2.jpg/v1/fill/w_1200,h_900,al_c,q_85,usm_0.66_1.00_0.01/DSC01627_JPG.webp",
+                                           "size": "full",
+                                           "aspectRatio": "20:13",
+                                           "aspectMode": "cover",
+                                           "action": {
+                                                       "type": "uri",
+                                                      "label": "Action",
+                                                      "uri": "https://linecorp.com/"
+                                                     }
+                                          },
+                                  "body": {
+                                            "type": "box",
+                                           "layout": "horizontal",
+                                           "spacing": "md",
+                                           "contents": [
+                                                         {
+                                                           "type": "box",
+                                                          "layout": "vertical",
+                                                          "flex": 1,
+                                                          "contents": [
+                                                                        {
+                                                                          "type": "image",
+                                                                         "url": "https://static.wixstatic.com/media/0fcc93_0a4b11f556a94063980749c3e363d707~mv2.jpg/v1/fill/w_1000,h_622,al_c,q_85/0fcc93_0a4b11f556a94063980749c3e363d707~mv2.webp",
+                                                                         "gravity": "bottom",
+                                                                         "size": "sm",
+                                                                         "aspectRatio": "4:3",
+                                                                         "aspectMode": "cover"
+                                                                        },
+                                                                        {
+                                                                          "type": "image",
+                                                                         "url": "https://static.wixstatic.com/media/0fcc93_6b7fddba14fe42eaa8ed852cad8c1047~mv2.jpg/v1/fill/w_1108,h_1477,al_c,q_85/IMG_2804_JPG.webp",
+                                                                         "margin": "md",
+                                                                         "size": "sm",
+                                                                         "aspectRatio": "4:3",
+                                                                         "aspectMode": "cover"
+                                                                        }
+                                                                      ]
+                                                         },
+                                                         {
+                                                           "type": "box",
+                                                          "layout": "vertical",
+                                                          "flex": 2,
+                                                          "contents": [
+                                                                        {
+                                                                          "type": "text",
+                                                                         "text": "木村先生今日も絶好調！！",
+                                                                         "flex": 1,
+                                                                         "size": "xs",
+                                                                         "gravity": "top"
+                                                                        },
+                                                                        {
+                                                                          "type": "separator",
+                                                                         "margin": "none"
+                                                                        },
+                                                                        {
+                                                                          "type": "text",
+                                                                         "text": "おかさやスキーの練習しろ！",
+                                                                         "flex": 2,
+                                                                         "size": "xs",
+                                                                         "gravity": "center"
+                                                                        },
+                                                                        {
+                                                                          "type": "separator"
+                                                                        },
+                                                                        {
+                                                                          "type": "text",
+                                                                         "text": "石井何してる？",
+                                                                         "flex": 2,
+                                                                         "size": "xs",
+                                                                         "gravity": "center"
+                                                                        },
+                                                                        {
+                                                                          "type": "separator"
+                                                                        },
+                                                                        {
+                                                                          "type": "text",
+                                                                         "text": "これが送れれバブルメッセージOK",
+                                                                         "flex": 1,
+                                                                         "size": "xs",
+                                                                         "gravity": "bottom"
+                                                                        }
+                                                                      ]
+                                                         }
+                                                       ]
+                                          },
+                                  "footer": {
+                                              "type": "box",
+                                             "layout": "horizontal",
+                                             "contents": [
+                                                           {
+                                                             "type": "button",
+                                                            "action": {
+                                                                        "type": "uri",
+                                                                       "label": "More",
+                                                                       "uri": "https://www.takanoriishii.com/"
+                                                                      }
+                                                           }
+                                                         ]
+                                            }
+                                 },
+                                 {
+                                   "type": "bubble",
+                                  "hero": {
+                                            "type": "image",
+                                           "url": "https://static.wixstatic.com/media/0fcc93_c663d9a267d54364b5e77141226a8755~mv2_d_3232_2424_s_4_2.jpg/v1/fill/w_1200,h_900,al_c,q_85,usm_0.66_1.00_0.01/P1050195_JPG.webp",
+                                           "size": "full",
+                                           "aspectRatio": "20:13",
+                                           "aspectMode": "cover",
+                                           "action": {
+                                                       "type": "uri",
+                                                      "label": "Action",
+                                                      "uri": "https://linecorp.com/"
+                                                     }
+                                          },
+                                  "body": {
+                                            "type": "box",
+                                           "layout": "vertical",
+                                           "spacing": "md",
+                                           "contents": [
+                                                         {
+                                                           "type": "text",
+                                                          "text": "チームミーティング",
+                                                          "size": "xl",
+                                                          "gravity": "center",
+                                                          "weight": "bold",
+                                                          "wrap": true
+                                                         },
+                                                         {
+                                                           "type": "box",
+                                                          "layout": "baseline",
+                                                          "margin": "md",
+                                                          "contents": [
+                                                                        {
+                                                                          "type": "icon",
+                                                                         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                                                         "size": "sm"
+                                                                        },
+                                                                        {
+                                                                          "type": "icon",
+                                                                         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                                                         "size": "sm"
+                                                                        },
+                                                                        {
+                                                                          "type": "icon",
+                                                                         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                                                         "size": "sm"
+                                                                        },
+                                                                        {
+                                                                          "type": "icon",
+                                                                         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gold_star_28.png",
+                                                                         "size": "sm"
+                                                                        },
+                                                                        {
+                                                                          "type": "icon",
+                                                                         "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/review_gray_star_28.png",
+                                                                         "size": "sm"
+                                                                        },
+                                                                        {
+                                                                          "type": "text",
+                                                                         "text": "4.0",
+                                                                         "flex": 0,
+                                                                         "margin": "md",
+                                                                         "size": "sm",
+                                                                         "color": "#999999"
+                                                                        }
+                                                                      ]
+                                                         },
+                                                         {
+                                                           "type": "box",
+                                                          "layout": "vertical",
+                                                          "spacing": "sm",
+                                                          "margin": "lg",
+                                                          "contents": [
+                                                                        {
+                                                                          "type": "box",
+                                                                         "layout": "baseline",
+                                                                         "spacing": "sm",
+                                                                         "contents": [
+                                                                                       {
+                                                                                         "type": "text",
+                                                                                        "text": "Date",
+                                                                                        "flex": 1,
+                                                                                        "size": "sm",
+                                                                                        "color": "#AAAAAA"
+                                                                                       },
+                                                                                       {
+                                                                                         "type": "text",
+                                                                                        "text": "Monday 25, 9:00PM",
+                                                                                        "flex": 4,
+                                                                                        "size": "sm",
+                                                                                        "color": "#666666",
+                                                                                        "wrap": true
+                                                                                       }
+                                                                                     ]
+                                                                        },
+                                                                        {
+                                                                          "type": "box",
+                                                                         "layout": "baseline",
+                                                                         "spacing": "sm",
+                                                                         "contents": [
+                                                                                       {
+                                                                                         "type": "text",
+                                                                                        "text": "Place",
+                                                                                        "flex": 1,
+                                                                                        "size": "sm",
+                                                                                        "color": "#AAAAAA"
+                                                                                       },
+                                                                                       {
+                                                                                         "type": "text",
+                                                                                        "text": "7 Floor, No.3",
+                                                                                        "flex": 4,
+                                                                                        "size": "sm",
+                                                                                        "color": "#666666",
+                                                                                        "wrap": true
+                                                                                       }
+                                                                                     ]
+                                                                        },
+                                                                        {
+                                                                          "type": "box",
+                                                                         "layout": "vertical",
+                                                                         "margin": "xxl",
+                                                                         "contents": [
+                                                                                       {
+                                                                                         "type": "spacer",
+                                                                                        "size": "xs"
+                                                                                       },
+                                                                                       {
+                                                                                         "type": "image",
+                                                                                        "url": "https://scdn.line-apps.com/n/channel_devcenter/img/fx/linecorp_code_withborder.png",
+                                                                                        "size": "xl",
+                                                                                        "aspectMode": "cover"
+                                                                                       },
+                                                                                       {
+                                                                                         "type": "text",
+                                                                                        "text": "あなたはこのQRからミーティング情報を得ることができます",
+                                                                                        "margin": "xxl",
+                                                                                        "size": "xs",
+                                                                                        "color": "#AAAAAA",
+                                                                                        "wrap": true
+                                                                                       }
+                                                                                     ]
+                                                                        }
+                                                                      ]
+                                                         }
+                                                       ]
+                                          }
+                                 }
+                               ]
+                  }
+}
