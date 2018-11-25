@@ -3,12 +3,19 @@
 # 2018-10-10, old filename was hrm.rb.
 # 2018-11-24, [CREATE] /form and /push
 #             [CREATE] views
+# 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
+
+# FIXME:
+# LINE parameters
+# これも環境変数から？
+#BOT0_SECRET = "dcca2a5a3963facdae41a4a2e20555e8"
+#BOT0_TOKEN  = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
 
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
@@ -19,12 +26,9 @@ DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
 
-# better from DB[:users]
-kimura  = "U583b8f1e145218b0f4358c8d2519357d"
-okamura = "Ue2bf7adb6b6e114e072d81ad42742597"
-ishii   = "U7863b8ba9f247ed2233304a7e9c7a99c"
-
-push_to = [ kimura, okamura, ishii ]
+# FIXME: もし、USER を追加したらこれではいけなくなる。
+# staff を作ればどうか？ ishii_kimura_saya でもよい。
+push_to = USERS.map {|r| r[:uid]}
 
 class Hash
   def slice(*whitelist)
@@ -42,8 +46,8 @@ end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
-    config.channel_secret = "dcca2a5a3963facdae41a4a2e20555e8"
-    config.channel_token = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
+    config.channel_secret = ENV["BOT0_SECRET"]
+    config.channel_token  = ENV["BOT0_TOKEN"]
   }
 end
 
@@ -149,31 +153,24 @@ post '/callback' do
 #{avg+std}~#{avg+2*std} は注意です。
 #{avg+2*std}~ は要注意です。
 休養を検討しましょう。"
-        message = {
-          type: 'text',
-          text: text
-        }
-        client.reply_message(event['replyToken'], message)
 
-        # push test
+#        message = {type: 'text', text: text}
+        client.reply_message(event['replyToken'], {type: 'text', text: text})
+
+        # 受け取ったメッセージを BOT0 の USER に表示する。
         push_to.each do |dest|
           client.push_message(
             dest,
-            {type: 'text', text: "BOT0 got: #{event.message['text']} from #{name}"})
+            {type: 'text', text: "BOT0 received: #{event.message['text']} from #{name}"})
         end
-        # push test end
 
-        # # web の画面
-        # off 2018-11-24
-        # File.open("public/index.html","a") do |fp|
-        #   fp.puts "<p>#{Time.now} #{name} #{value}</p>"
-        # end
       end
     end
   }
   "OK"
 end
 
+# No bootstrap
 get "/data" do
   ret = []
   DATA.reverse.each do |r|

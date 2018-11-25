@@ -1,7 +1,10 @@
-<h2>Add Receiver <%= VERSION %></h2>
+<h2>Add Receiver</h2>
 <p>LINE の ID が必要です。</p>
 <form method='post' action=/add-receiver>
-name: <input type='text' name='name'><br>
-uid:  <input type='text' name='uid'><br>
-<input type='submit' value='add'>
+  <table>
+  <tr><th>name</th><td><input type='text' name='name'></td></tr>
+  <tr><th>uid</th><td><input type='text' name='uid'></td></tr>
+</table>
+<br>
+<p><input class='btn btn-primary' type='submit' value='add'></p>
 </form>
