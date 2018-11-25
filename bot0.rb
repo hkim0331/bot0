@@ -3,12 +3,17 @@
 # 2018-10-10, old filename was hrm.rb.
 # 2018-11-24, [CREATE] /form and /push
 #             [CREATE] views
+# 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.4"
+VERSION = "0.2.5"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
+
+# LINE parameters
+CHAN_SECRET = "dcca2a5a3963facdae41a4a2e20555e8"
+CHAN_TOKEN  = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
 
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
@@ -20,11 +25,11 @@ USERS = DB[:users]
 MSGS  = DB[:msgs]
 
 # better from DB[:users]
-kimura  = "U583b8f1e145218b0f4358c8d2519357d"
-okamura = "Ue2bf7adb6b6e114e072d81ad42742597"
-ishii   = "U7863b8ba9f247ed2233304a7e9c7a99c"
-
-push_to = [ kimura, okamura, ishii ]
+#kimura  = "U583b8f1e145218b0f4358c8d2519357d"
+#okamura = "Ue2bf7adb6b6e114e072d81ad42742597"
+#ishii   = "U7863b8ba9f247ed2233304a7e9c7a99c"
+#push_to = [ kimura, okamura, ishii ]
+push_to = USERS.map {|r| r[:uid]}
 
 class Hash
   def slice(*whitelist)
@@ -42,8 +47,8 @@ end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
-    config.channel_secret = "dcca2a5a3963facdae41a4a2e20555e8"
-    config.channel_token = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
+    config.channel_secret = CHAN_SECRET
+    config.channel_token = CHAN_TOKEN
   }
 end
 
@@ -119,6 +124,7 @@ get "/push-test" do
   erb :push_test, :layout => :layout
 end
 
+
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
@@ -159,12 +165,12 @@ post '/callback' do
         push_to.each do |dest|
           client.push_message(
             dest,
-            {type: 'text', text: "BOT0 got: #{event.message['text']} from #{name}"})
+            {type: 'text', text: "BOT0 received: #{event.message['text']} from #{name}"})
         end
         # push test end
 
         # # web の画面
-        # off 2018-11-24
+        # off, 2018-11-24
         # File.open("public/index.html","a") do |fp|
         #   fp.puts "<p>#{Time.now} #{name} #{value}</p>"
         # end
@@ -174,6 +180,7 @@ post '/callback' do
   "OK"
 end
 
+# No bootstrap
 get "/data" do
   ret = []
   DATA.reverse.each do |r|
