@@ -11,10 +11,11 @@ require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
 
+# FIXME:
 # LINE parameters
 # これも環境変数から？
-BOT0_SECRET = "dcca2a5a3963facdae41a4a2e20555e8"
-BOT0_TOKEN  = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
+#BOT0_SECRET = "dcca2a5a3963facdae41a4a2e20555e8"
+#BOT0_TOKEN  = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
 
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
@@ -26,6 +27,7 @@ USERS = DB[:users]
 MSGS  = DB[:msgs]
 
 # FIXME: もし、USER を追加したらこれではいけなくなる。
+# staff を作ればどうか？ ishii_kimura_saya でもよい。
 push_to = USERS.map {|r| r[:uid]}
 
 class Hash
@@ -44,8 +46,8 @@ end
 
 def client
   @client ||= Line::Bot::Client.new { |config|
-    config.channel_secret = BOT0_SECRET
-    config.channel_token  = BOT0_TOKEN
+    config.channel_secret = ENV["BOT0_SECRET"]
+    config.channel_token  = ENV["BOT0_TOKEN"]
   }
 end
 
@@ -121,7 +123,6 @@ get "/push-test" do
   erb :push_test, :layout => :layout
 end
 
-
 post '/callback' do
   body = request.body.read
   signature = request.env['HTTP_X_LINE_SIGNATURE']
@@ -152,11 +153,9 @@ post '/callback' do
 #{avg+std}~#{avg+2*std} は注意です。
 #{avg+2*std}~ は要注意です。
 休養を検討しましょう。"
-        message = {
-          type: 'text',
-          text: text
-        }
-        client.reply_message(event['replyToken'], message)
+
+#        message = {type: 'text', text: text}
+        client.reply_message(event['replyToken'], {type: 'text', text: text})
 
         # 受け取ったメッセージを BOT0 の USER に表示する。
         push_to.each do |dest|
