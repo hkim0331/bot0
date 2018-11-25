@@ -1,13 +1,13 @@
 # Bot0
 
-LINE BOT の練習のつもりで作成したが、そのまま kohhoh.jp で使いまわしている。
+LINE BOT の練習のつもりで作成したが、そのまま使いまわしている。
 
 ## SYNOPSIS
 
 ## Require
 
 * ruby 2.3.1p112 (develop: ruby 2.5.3p105)
-* gem install sinatra line-bot-api sequel sqlite3 mysql2
+* gem install sinatra line-bot-api sequel mysql2
 
 ## 0.2.*
 
@@ -19,6 +19,8 @@ LINE BOT の練習のつもりで作成したが、そのまま kohhoh.jp で使
   BOT_USER="user"だといいの？
 * CREATE: 0.2.4, views.
 * FIXME: エラーメッセージの表示方法。
+* Bootstrap.
+
 
 ---
 hiroshi . kimura . 0331 @ gmail . com
