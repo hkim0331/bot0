@@ -11,12 +11,6 @@ require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
 
-# FIXME:
-# LINE parameters
-# これも環境変数から？
-#BOT0_SECRET = "dcca2a5a3963facdae41a4a2e20555e8"
-#BOT0_TOKEN  = "rMS8Kf7UNnc8BvuzZ2aIPqUSDFtmvSUYOrkAeRl15GGQ5Jtm/XWq16/YpA1LIqZzOjbXEbwoV1PsB/JJ3QFmZwgvB7mU/SKsrg0wDF7BZD3eONkpkZ2GK04a7WLLwvWJb2zxndJ7/5jxwPCkOcVpRQdB04t89/1O/w1cDnyilFU="
-
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
   password: ENV["BOT_PASSWORD"],
