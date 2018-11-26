@@ -11,6 +11,15 @@ require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
 
+helpers do
+  def authenticate
+    auth = Rack::Auth::Basic.new(Proc.new {}) do |username, password|
+      username = 'judo' && password = 'yawara'
+    end
+    return auth.call(request.env)
+  end
+end
+
 DB = Sequel.mysql2("bot0",
   user: ENV["BOT_USER"],
   password: ENV["BOT_PASSWORD"],
@@ -112,6 +121,10 @@ get '/exec-push' do
 end
 
 get "/push-test" do
+  # 20181126
+  not_authentication = authenticate
+  return not_authentication if not_authentication
+  #
   @users = USERS.all
   @msgs  = MSGS.all
   erb :push_test, :layout => :layout
@@ -166,6 +179,10 @@ end
 
 # No bootstrap
 get "/data" do
+  # 20181126
+  not_authentication = authenticate
+  return not_authentication if not_authentication
+  #
   ret = []
   DATA.reverse.each do |r|
     ret.push "#{r[:timestamp]} #{r[:name]} #{r[:hb]}<br>"
