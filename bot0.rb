@@ -5,7 +5,7 @@
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.5"
+VERSION = "0.2.6"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -20,10 +20,15 @@ helpers do
   end
 end
 
-DB = Sequel.mysql2("bot0",
-  user: ENV["BOT_USER"],
-  password: ENV["BOT_PASSWORD"],
-  host: 'localhost')
+begin
+  DB = Sequel.mysql2("bot0",
+    user: ENV["BOT_USER"],
+    password: ENV["BOT_PASSWORD"],
+    host: 'localhost')
+rescue
+  STDERR.puts $!
+  exit 1 
+end
 
 DATA  = DB[:data]
 USERS = DB[:users]
@@ -72,6 +77,8 @@ end
 post '/add-receiver' do
   req = params.slice "name", "uid"
   USERS.insert(name: req["name"], uid: req["uid"])
+
+  @msg = "add receiver."
   erb :back, :layout => :layout
 end
 
@@ -79,23 +86,39 @@ get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
 
-get '/push' do
-  req = params.slice "id"
-  m = MSGS.where(id: req["id"].to_i).first[:msg]
-  json = JSON.parse(m)
-  if json.nil?
-    "<p>json error</p>"
-  else
-    USERS.each do |user|
-      client.push_message(user[:uid], json)
-    end
-  end
+# これはどこから呼ばれる？
+# get '/push' do
+#   req = params.slice "id"
+#   m = MSGS.where(id: req["id"].to_i).first[:msg]
+#   json = JSON.parse(m)
+#   if json.nil?
+#     "<p>json error</p>"
+#   else
+#     USERS.each do |user|
+#       client.push_message(user[:uid], json)
+#     end
+#   end
+#   @msg = "message pushed."
+#   erb :back, :layout => :layout
+# end
+
+post '/del-msg' do
+  MSGS.where(:id => params[:id]).update(:stat => false)
+
+  @msg = "deleted."
   erb :back, :layout => :layout
+end
+
+get '/del-msg' do
+  @msgs = MSGS.where(:stat => true).all
+  erb :del_msg, :layout => :layout
 end
 
 post '/add-msg' do
   req = params.slice "comment", "msg"
   MSGS.insert(comment: req["comment"], msg: req["msg"])
+
+  @msg = "add message."
   erb :back, :layout => :layout
 end
 
@@ -103,7 +126,7 @@ get '/add-msg' do
   erb :add_msg, :layout => :layout
 end
 
-get '/exec-push' do
+post '/push-test' do
   req = params.slice 'user','msg'
   if req['user'].nil?
     return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
@@ -117,6 +140,8 @@ get '/exec-push' do
     uid = USERS.where(id: u).first[:uid]
     client.push_message(uid, json)
   end
+
+  @msg="push test done."
   erb :back, :layout => :layout
 end
 
@@ -126,7 +151,8 @@ get "/push-test" do
   return not_authentication if not_authentication
   #
   @users = USERS.all
-  @msgs  = MSGS.all
+  @msgs  = MSGS.where(:stat => true).all
+
   erb :push_test, :layout => :layout
 end
 
