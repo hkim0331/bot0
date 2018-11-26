@@ -1,0 +1,10 @@
+<h2>Delete Message</h2>
+
+<% @msgs.each do |m| %>
+  <p><form method='post' action='/del-msg'>
+    <input type='hidden' name='id' value='<%= m[:id]%>'>
+    <input class='btn btn-danger btn-sm' type='submit' value="delete">
+    <%= m[:comment] %>
+  </form>
+  </p>
+<% end %>
