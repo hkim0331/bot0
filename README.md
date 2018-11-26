@@ -11,6 +11,7 @@ LINE BOT の練習のつもりで作成したが、そのまま使いまわし�
 
 ## 0.2.*
 
+* [0.2.7] message を登録解除できる。
 * alter table msgs add column stat bool default true
 * CHANGED: db/ の sql スクリプトを git 入り。
 * ADDED: get '/form', post '/push'
