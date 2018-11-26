@@ -5,7 +5,7 @@
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.6"
+VERSION = "0.2.7"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
