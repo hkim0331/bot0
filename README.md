@@ -9,8 +9,15 @@ LINE BOT の練習のつもりで作成したが、そのまま使いまわし�
 * ruby 2.3.1p112 (develop: ruby 2.5.3p105)
 * gem install sinatra line-bot-api sequel mysql2
 
+## 0.3.*
+
+* イメージをアップロードできる。2018-12-02
+
 ## 0.2.*
 
+* [0.2.7] message を登録解除できる。
+* alter table msgs add column stat bool default true
+* CHANGED: db/ の sql スクリプトを git 入り。
 * ADDED: get '/form', post '/push'
 * CHANGED: post 'push' => get '/push'
 * FIXME: sudo systemctl start bot0 では立ち上がらなくなった。user,password が原因？

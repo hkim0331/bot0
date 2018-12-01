@@ -1,4 +1,4 @@
-<form action='/exec-push'>
+<form method='post' action='/push-test'>
 <h3>Receivers</h3>
 <% @users.each do |u| %>
   <input type='checkbox' name='user[]' value='<%= u[:id] %>' checked='checked'><%= u[:name] %><br>
@@ -9,9 +9,17 @@
 <% @msgs.each do |m| %>
   <input type='radio' name='msg' value='<%= m[:id] %>'><%= m[:comment] %><br>
 <% end %>
-<p><a class='btn btn-primary btn-sm' href='/add-msg'>add...</a></p>
+<p>
+  <a class='btn btn-primary btn-sm' href='/add-msg'>add...</a>
+  <a class='btn btn-danger btn-sm' href='/del-msg'>del...</a>
+</p>
 
-<h3>Timing</h3>
+<h3>Images upload</h3>
+
+<p><a href="/upload">upload</a></p>
+
+<h3>When Push?</h3>
+
 <p>2018-11-24, one shot だけです。</p>
 <input type='radio' name='timing' checked='checked'>one shot<br>
 <input type='radio' disabled='disabled'> every <input size='4'> seconds<br>

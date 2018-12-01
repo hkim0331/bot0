@@ -5,20 +5,38 @@
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.5"
+VERSION = "0.3"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
 require 'sequel'    # gem install seqlel mysql2
 
-DB = Sequel.mysql2("bot0",
-  user: ENV["BOT_USER"],
-  password: ENV["BOT_PASSWORD"],
-  host: 'localhost')
+helpers do
+  def authenticate
+    auth = Rack::Auth::Basic.new(Proc.new {}) do |username, password|
+      username = 'judo' && password = 'yawara'
+    end
+    return auth.call(request.env)
+  end
+end
+
+begin
+  DB = Sequel.mysql2("bot0",
+    user: ENV["BOT_USER"],
+    password: ENV["BOT_PASSWORD"],
+    host: 'localhost')
+rescue
+  STDERR.puts $!
+  exit 1
+end
 
 DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
+
+BASE_URL = "https://bot.kohhoh.jp"
+IMAGES = "public/images"
+
 
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
@@ -60,9 +78,33 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
+# 2018-12-01
+get '/upload' do
+  @files = []
+  Dir.entries(IMAGES).each do |e|
+    next if e =~ /^\./
+    @files.push [e, BASE_URL + "/images/" + e]
+  end
+  erb :upload, :layout => :layout
+end
+
+post '/upload' do
+  if params[:file]
+    File.open("#{IMAGES}/#{params[:file][:filename]}","wb") do |f|
+      f.write params[:file][:tempfile].read
+    end
+  else
+    return "<p>ERROR: upload failed</p>"
+  end
+  redirect "/upload"
+end
+
+
 post '/add-receiver' do
   req = params.slice "name", "uid"
   USERS.insert(name: req["name"], uid: req["uid"])
+
+  @msg = "add receiver."
   erb :back, :layout => :layout
 end
 
@@ -70,23 +112,24 @@ get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
 
-get '/push' do
-  req = params.slice "id"
-  m = MSGS.where(id: req["id"].to_i).first[:msg]
-  json = JSON.parse(m)
-  if json.nil?
-    "<p>json error</p>"
-  else
-    USERS.each do |user|
-      client.push_message(user[:uid], json)
-    end
-  end
+
+post '/del-msg' do
+  MSGS.where(:id => params[:id]).update(:stat => false)
+
+  @msg = "deleted."
   erb :back, :layout => :layout
+end
+
+get '/del-msg' do
+  @msgs = MSGS.where(:stat => true).all
+  erb :del_msg, :layout => :layout
 end
 
 post '/add-msg' do
   req = params.slice "comment", "msg"
   MSGS.insert(comment: req["comment"], msg: req["msg"])
+
+  @msg = "add message."
   erb :back, :layout => :layout
 end
 
@@ -94,7 +137,7 @@ get '/add-msg' do
   erb :add_msg, :layout => :layout
 end
 
-get '/exec-push' do
+post '/push-test' do
   req = params.slice 'user','msg'
   if req['user'].nil?
     return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
@@ -108,12 +151,19 @@ get '/exec-push' do
     uid = USERS.where(id: u).first[:uid]
     client.push_message(uid, json)
   end
+
+  @msg="push test done."
   erb :back, :layout => :layout
 end
 
 get "/push-test" do
+  # 20181126
+  not_authentication = authenticate
+  return not_authentication if not_authentication
+  #
   @users = USERS.all
-  @msgs  = MSGS.all
+  @msgs  = MSGS.where(:stat => true).all
+
   erb :push_test, :layout => :layout
 end
 
@@ -166,6 +216,10 @@ end
 
 # No bootstrap
 get "/data" do
+  # 20181126
+  not_authentication = authenticate
+  return not_authentication if not_authentication
+  #
   ret = []
   DATA.reverse.each do |r|
     ret.push "#{r[:timestamp]} #{r[:name]} #{r[:hb]}<br>"
