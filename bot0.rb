@@ -5,7 +5,7 @@
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.7"
+VERSION = "0.3"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -112,21 +112,6 @@ get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
 
-# これはどこから呼ばれる？
-# get '/push' do
-#   req = params.slice "id"
-#   m = MSGS.where(id: req["id"].to_i).first[:msg]
-#   json = JSON.parse(m)
-#   if json.nil?
-#     "<p>json error</p>"
-#   else
-#     USERS.each do |user|
-#       client.push_message(user[:uid], json)
-#     end
-#   end
-#   @msg = "message pushed."
-#   erb :back, :layout => :layout
-# end
 
 post '/del-msg' do
   MSGS.where(:id => params[:id]).update(:stat => false)
