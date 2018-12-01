@@ -1,4 +1,4 @@
-all: msgs users
+all: msgs users migrate
 
 create-msgs:
 	mysql -u user -p bot0 < create-msgs.sql
@@ -11,3 +11,6 @@ msgs: create-msgs
 
 users: create-users
 	ruby seed-users.rb
+
+migrate:
+	mysql -u user -p bot0 < add-stat-to-msgs.sql

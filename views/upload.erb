@@ -1,0 +1,12 @@
+<h2>IMAGES</h2>
+
+<% @files.each do |f| %>
+<p><%= f %></p>
+<% end %>
+
+<h4>upload</h4>
+
+<form method='post' action='/upload' enctype="multipart/form-data">
+<input type='file' name='file'>
+<input type='submit' value='upload'>
+</form>
