@@ -1,12 +1,15 @@
 <h2>IMAGES</h2>
 
-<% @files.each do |f| %>
-<p><%= f %></p>
-<% end %>
+<table class='table table-striped table-hover'>
+	<tr><th>file</th><th>url</th></tr>
+	<% @files.each do |f| %>
+	<tr><td><a href='<%= f[1]%>'><%= f[0] %></a></td><td><%= f[1]%></td></tr>
+	<% end %>
+</table>
 
 <h4>upload</h4>
 
 <form method='post' action='/upload' enctype="multipart/form-data">
-<input type='file' name='file'>
-<input type='submit' value='upload'>
+	<p><input type='file' name='file'></p>
+	<p><input class='btn btn-primary' type='submit' value='upload'></p>
 </form>

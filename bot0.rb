@@ -34,7 +34,9 @@ DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
 
+BASE_URL = "https://bot.kohhoh.jp"
 IMAGES = "public/images"
+
 
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
@@ -78,13 +80,25 @@ end
 
 # 2018-12-01
 get '/upload' do
-  @files = Dir.glob("IMAGES/*")
+  @files = []
+  Dir.entries(IMAGES).each do |e|
+    next if e =~ /^\./
+    @files.push [e, BASE_URL + "/images/" + e]
+  end
   erb :upload, :layout => :layout
 end
 
 post '/upload' do
-
+  if params[:file]
+    File.open("#{IMAGES}/#{params[:file][:filename]}","wb") do |f|
+      f.write params[:file][:tempfile].read
+    end
+  else
+    return "<p>ERROR: upload failed</p>"
+  end
+  redirect "/upload"
 end
+
 
 post '/add-receiver' do
   req = params.slice "name", "uid"
