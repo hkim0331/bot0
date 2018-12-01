@@ -34,6 +34,8 @@ DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
 
+IMAGES = "public/images"
+
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
 push_to = USERS.map {|r| r[:uid]}
@@ -72,6 +74,16 @@ end
 
 def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
+end
+
+# 2018-12-01
+get '/upload' do
+  @files = Dir.glob("IMAGES/*")
+  erb :upload, :layout => :layout
+end
+
+post '/upload' do
+
 end
 
 post '/add-receiver' do

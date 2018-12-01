@@ -1,9 +1,13 @@
 all: msgs users
 
-msgs:
-	#mysql -u user -p bot0 < create-msg.sql
+create-msgs:
+	mysql -u user -p bot0 < create-msgs.sql
+
+create-users:
+	mysql -u user -p bot0 < create-users.sql
+
+msgs: create-msgs
 	ruby seed-msgs.rb
 
-users:
-	#mysql -u user -p bot0 < create-user.sql
+users: create-users
 	ruby seed-users.rb
