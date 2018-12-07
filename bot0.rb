@@ -188,9 +188,10 @@ post '/push-test' do
   if req['user'].nil?
     return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
   end
-  if req['id'].nil?
+  if req['id'].empty?
     return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
   end
+#  puts "res['id'] = #{req['id']} #{req['id'].empty?}"
   m = MSGS.where(id: req['id']).first[:msg]
   begin
     json = JSON.parse(m)
