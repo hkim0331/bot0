@@ -1,33 +1,32 @@
 <form method='post' action='/push-test'>
-<h3>Receivers</h3>
-<% @users.each do |u| %>
-  <input type='checkbox' name='user[]' value='<%= u[:id] %>' checked='checked'><%= u[:name] %><br>
-<% end %>
-<p><a class='btn btn-primary btn-sm' href='/add-receiver'>add...</a></p>
+<input type='hidden' name='id' value='<%= @id %>'>
 
 <h3>Message</h3>
-<% @msgs.each do |m| %>
-  <input type='radio' name='msg' value='<%= m[:id] %>'><%= m[:comment] %><br>
-<% end %>
 <p>
-  <a class='btn btn-primary btn-sm' href='/add-msg'>add...</a>
-  <a class='btn btn-danger btn-sm' href='/del-msg'>del...</a>
+  <input value='<%= @comment %>'>
+  <a href='/msg-select' class='btn btn-primary btn-sm'>select...</a>
 </p>
 
-<h3>Images upload</h3>
+<hr>
 
-<p><a href="/upload">upload</a></p>
+<h3>Receivers</h3>
 
-<h3>When Push?</h3>
+<p>
+  <% @users.each do |u| %>
+  <input type='checkbox' name='user[]' value='<%= u[:id] %>' checked='checked'><%= u[:name] %>
+  <% end %>
+</p>
+<p>
+  <a class='btn btn-primary btn-sm' href='/add-receiver'>add...</a>
+</p>
 
-<p>2018-11-24, one shot だけです。</p>
-<input type='radio' name='timing' checked='checked'>one shot<br>
-<input type='radio' disabled='disabled'> every <input size='4'> seconds<br>
-<input type='radio' disabled='disabled'> at <input size='2'>:<input size='2'><br>
-
-<br>
+<hr>
 
 <p><input type='submit' class="btn btn-primary" value='PUSH'></p>
 
-
 </form>
+
+<hr>
+
+
+<p><a href="/upload" class='btn btn-success'>Upload image</a></p>
