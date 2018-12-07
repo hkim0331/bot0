@@ -5,7 +5,7 @@
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
 
-VERSION = "0.2.7"
+VERSION = "0.3"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -33,6 +33,10 @@ end
 DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
+
+BASE_URL = "https://bot.kohhoh.jp"
+IMAGES = "public/images"
+
 
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
@@ -75,6 +79,7 @@ def db_save(name, value)
 end
 
 
+
 #
 # push test
 #
@@ -82,6 +87,7 @@ end
 get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
+
 
 post '/add-receiver' do
   req = params.slice "name", "uid"
@@ -91,8 +97,26 @@ post '/add-receiver' do
   erb :back, :layout => :layout
 end
 
+# 2018-12-01
+get '/upload' do
+  @files = []
+  Dir.entries(IMAGES).each do |e|
+    next if e =~ /^\./
+    @files.push [e, BASE_URL + "/images/" + e]
+  end
+  erb :upload, :layout => :layout
+end
 
-
+post '/upload' do
+  if params[:file]
+    File.open("#{IMAGES}/#{params[:file][:filename]}","wb") do |f|
+      f.write params[:file][:tempfile].read
+    end
+  else
+    return "<p>ERROR: upload failed</p>"
+  end
+  redirect "/upload"
+end
 
 
 post '/del-msg' do
