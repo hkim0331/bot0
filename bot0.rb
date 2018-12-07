@@ -76,11 +76,11 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
-
 #
 # push test
 #
 
+<<<<<<< HEAD
 BASE_URL = "https://bot.kohhoh.jp"
 IMAGES = "public/images"
 
@@ -88,6 +88,21 @@ IMAGES = "public/images"
 # ローカルファイル名 = リモートファイル名で、かつ、URL の一部は制限か？
 # データベース用意し、description と id、セーブはタイムスタンプとかでは？
 
+=======
+get '/add-receiver' do
+  erb :add_receiver, :layout => :layout
+end
+
+
+post '/add-receiver' do
+  req = params.slice "name", "uid"
+  USERS.insert(name: req["name"], uid: req["uid"])
+
+  @msg = "add receiver."
+  erb :back, :layout => :layout
+end
+
+# 2018-12-01
 get '/upload' do
   @files = []
   Dir.entries(IMAGES).each do |e|
@@ -108,7 +123,9 @@ post '/upload' do
   redirect "/upload"
 end
 
-
+#
+# receiver
+#
 post '/add-receiver' do
   req = params.slice 'name', 'uid'
   USERS.insert(name: req['name'], uid: req['uid'])
@@ -120,6 +137,9 @@ get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
 
+#
+# message
+#
 
 post '/del-msg' do
   MSGS.where(:id => params[:id]).update(:stat => false)
@@ -171,7 +191,7 @@ get "/push-test" do
   @id = params['m']
   @comment = @id.nil? ? "message not selected" : "id has value #{@id}"
   @users = USERS.all
-  
+
   erb :push_test, :layout => :layout
 end
 
