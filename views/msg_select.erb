@@ -4,6 +4,7 @@
 <% @msgs.each do |m| %>
 <tr>
   <td><a href='/push-test?id=<%= m[:id]%>' class='btn btn-primary btn-sm'>S</a></td>
+  <td><%= m[:timestamp].strftime("%F %T") %></td>
   <td><%= m[:comment] %></td>
   <td><a href='/msg-edit/<%= m[:id] %>' class='btn btn-success btn-sm'>E</a></td>
   <td><form method='post' action='/msg-delete'>
