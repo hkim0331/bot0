@@ -1,0 +1,10 @@
+<h2>Edit Message</h2>
+
+<form method='post' action='/msg-edit'>
+  <input type='hidden' name='_method' value='PUT'>
+  <input type='hidden' name='id' value='<%= @msg[:id] %>'>
+  <p>comment: <input type='text' name='comment' size='33' value='<%= @msg[:comment] %>'></p>
+  <p><textarea name='msg' cols='40' rows='10'><%= @msg[:msg] %></textarea></p>
+  <p><input class='btn btn-primary' type='submit' value='update'></p>
+</form>
+

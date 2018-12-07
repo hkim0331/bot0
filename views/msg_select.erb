@@ -1,0 +1,16 @@
+<h2>select message</h2>
+
+<table>
+<% @msgs.each do |m| %>
+<tr>
+  <td><a href='/push-test?id=<%= m[:id]%>' class='btn btn-primary btn-sm'>S</a></td>
+  <td><%= m[:comment] %></td>
+  <td><a href='/msg-edit/<%= m[:id] %>' class='btn btn-success btn-sm'>E</a></td>
+  <td><form method='post' action='/msg-delete'>
+    <input type='hidden' name='_method' value='DELETE'>
+    <input type='hidden' name='id' value='<%= m[:id] %>'>
+    <input type='submit' value='D' class='btn btn-danger btn-sm'>
+  </form></td>
+</tr>
+<% end %>
+</table>

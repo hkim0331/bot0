@@ -34,8 +34,6 @@ DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
 
-
-
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
 push_to = USERS.map {|r| r[:uid]}
@@ -80,7 +78,6 @@ end
 # push test
 #
 
-<<<<<<< HEAD
 BASE_URL = "https://bot.kohhoh.jp"
 IMAGES = "public/images"
 
@@ -88,7 +85,6 @@ IMAGES = "public/images"
 # ローカルファイル名 = リモートファイル名で、かつ、URL の一部は制限か？
 # データベース用意し、description と id、セーブはタイムスタンプとかでは？
 
-=======
 get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
@@ -141,16 +137,26 @@ end
 # message
 #
 
-post '/del-msg' do
-  MSGS.where(:id => params[:id]).update(:stat => false)
-
-  @msg = "deleted."
-  erb :back, :layout => :layout
+get '/msg-select' do
+  @msgs = MSGS
+  erb :msg_select, :layout => :layout
 end
 
-get '/del-msg' do
-  @msgs = MSGS.where(:stat => true).all
-  erb :del_msg, :layout => :layout
+get '/msg-edit/:id' do
+  @msg = MSGS.where(id: params['id']).first
+
+  erb :msg_edit, :layout => :layout
+end
+
+put '/msg-edit' do
+  MSGS.where(id: params[:id]).update(comment: params[:comment], msg: params[:msg])
+  redirect "/push-test"
+end
+
+post '/del-msg' do
+  id = params[:id]
+  MSGS.where(:id => params[:id]).update(:stat => false)
+  redirect "/msg-select"
 end
 
 post '/add-msg' do
@@ -165,35 +171,41 @@ get '/add-msg' do
   erb :add_msg, :layout => :layout
 end
 
-post '/push-test' do
-  req = params.slice 'user','msg'
-  if req['user'].nil?
-    return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
-  end
-  if req['msg'].nil?
-    return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
-  end
-  m = MSGS.where(id: req['msg'].to_i).first[:msg]
-  json = JSON.parse(m)
-  req['user'].each do |u|
-    uid = USERS.where(id: u).first[:uid]
-    client.push_message(uid, json)
-  end
-
-  @msg="push test done."
-  erb :back, :layout => :layout
-end
-
 get "/push-test" do
   not_authentication = authenticate
   return not_authentication if not_authentication
 
-  @id = params['m']
-  @comment = @id.nil? ? "message not selected" : "id has value #{@id}"
+  @id = params['id']
+  @comment = @id.nil? ? "message not selected" : MSGS.where(id: @id).first[:comment]
   @users = USERS.all
-
+  
   erb :push_test, :layout => :layout
 end
+
+post '/push-test' do
+  req = params.slice 'user','msg','id'
+  if req['user'].nil?
+    return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
+  end
+  if req['id'].nil?
+    return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
+  end
+  m = MSGS.where(id: req['id']).first[:msg]
+  begin
+    json = JSON.parse(m)
+  rescue
+    return "<p>ERROR: JSON format error.</p>"
+  end
+  req['user'].each do |u|
+    uid = USERS.where(id: u).first[:uid]
+    client.push_message(uid, json)
+  end
+  @msg="push test done."
+
+  erb :back, :layout => :layout
+end
+
+
 
 post '/callback' do
   body = request.body.read
