@@ -6,7 +6,7 @@
 # 2018-11-25, CHANGED: use USERS.map
 # 2018-12-07, CAN EDIT messages.
 
-VERSION = "0.4.1"
+VERSION = "0.4.2"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -188,9 +188,10 @@ post '/push-test' do
   if req['user'].nil?
     return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
   end
-  if req['id'].nil?
+  if req['id'].empty?
     return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
   end
+#  puts "res['id'] = #{req['id']} #{req['id'].empty?}"
   m = MSGS.where(id: req['id']).first[:msg]
   begin
     json = JSON.parse(m)
