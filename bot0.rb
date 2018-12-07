@@ -74,6 +74,15 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
+
+#
+# push test
+#
+
+get '/add-receiver' do
+  erb :add_receiver, :layout => :layout
+end
+
 post '/add-receiver' do
   req = params.slice "name", "uid"
   USERS.insert(name: req["name"], uid: req["uid"])
@@ -82,25 +91,9 @@ post '/add-receiver' do
   erb :back, :layout => :layout
 end
 
-get '/add-receiver' do
-  erb :add_receiver, :layout => :layout
-end
 
-# これはどこから呼ばれる？
-# get '/push' do
-#   req = params.slice "id"
-#   m = MSGS.where(id: req["id"].to_i).first[:msg]
-#   json = JSON.parse(m)
-#   if json.nil?
-#     "<p>json error</p>"
-#   else
-#     USERS.each do |user|
-#       client.push_message(user[:uid], json)
-#     end
-#   end
-#   @msg = "message pushed."
-#   erb :back, :layout => :layout
-# end
+
+
 
 post '/del-msg' do
   MSGS.where(:id => params[:id]).update(:stat => false)
