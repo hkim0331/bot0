@@ -139,7 +139,7 @@ end
 #
 
 get '/msg-select' do
-  @msgs = MSGS
+  @msgs = MSGS.where(stat: true)
   erb :msg_select, :layout => :layout
 end
 
@@ -154,9 +154,9 @@ put '/msg-edit' do
   redirect "/push-test"
 end
 
-post '/del-msg' do
+delete '/msg-delete' do
   id = params[:id]
-  MSGS.where(:id => params[:id]).update(:stat => false)
+  MSGS.where(:id => params[:id]).update(stat: false)
   redirect "/msg-select"
 end
 
