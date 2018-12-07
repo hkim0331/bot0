@@ -4,8 +4,9 @@
 # 2018-11-24, [CREATE] /form and /push
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
+# 2018-12-07, CAN EDIT messages.
 
-VERSION = "0.3.1"
+VERSION = "0.4"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
