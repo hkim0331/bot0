@@ -1,9 +1,10 @@
-<h2>select message</h2>
+<h2>Select Message</h2>
 
 <table>
 <% @msgs.each do |m| %>
 <tr>
   <td><a href='/push-test?id=<%= m[:id]%>' class='btn btn-primary btn-sm'>S</a></td>
+  <td><%= m[:timestamp].strftime("%F %T") %></td>
   <td><%= m[:comment] %></td>
   <td><a href='/msg-edit/<%= m[:id] %>' class='btn btn-success btn-sm'>E</a></td>
   <td><form method='post' action='/msg-delete'>
@@ -14,3 +15,12 @@
 </tr>
 <% end %>
 </table>
+
+<p><a href='/push-test' class='btn btn-primary'>back</a></p>
+
+<ul>
+  <li>S はそのメッセージを選択、PUSH のページに戻る。</li>
+  <li>E は編集。</li>
+  <li>D は即座に削除（実はデータに false のマークをつけるだけ。後から復活はできる）。</li>
+</ul>
+

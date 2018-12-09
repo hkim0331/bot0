@@ -6,7 +6,7 @@
 # 2018-11-25, CHANGED: use USERS.map
 # 2018-12-07, CAN EDIT messages.
 
-VERSION = "0.4.1"
+VERSION = "0.4.2"
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -143,6 +143,18 @@ get '/msg-select' do
   erb :msg_select, :layout => :layout
 end
 
+get '/msg-add' do
+  erb :msg_add, :layout => :layout
+end
+
+post '/msg-add' do
+  req = params.slice "comment", "msg"
+  MSGS.insert(comment: req["comment"], msg: req["msg"])
+
+  @msg = "add message."
+  erb :back, :layout => :layout
+end
+
 get '/msg-edit/:id' do
   @msg = MSGS.where(id: params['id']).first
 
@@ -158,18 +170,6 @@ delete '/msg-delete' do
   id = params[:id]
   MSGS.where(:id => params[:id]).update(stat: false)
   redirect "/msg-select"
-end
-
-post '/add-msg' do
-  req = params.slice "comment", "msg"
-  MSGS.insert(comment: req["comment"], msg: req["msg"])
-
-  @msg = "add message."
-  erb :back, :layout => :layout
-end
-
-get '/add-msg' do
-  erb :add_msg, :layout => :layout
 end
 
 get "/push-test" do
