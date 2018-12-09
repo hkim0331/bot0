@@ -1,7 +1,7 @@
 DB=bot0.sqlite3
 
-start:
-	ruby bot0.rb -e production &
+shotgun:
+	shotgun bot0.rb 
 
 stop:
 	kill `ps ax | grep 'ruby bot0' | awk '{print $$1}'`

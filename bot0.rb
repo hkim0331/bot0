@@ -4,8 +4,9 @@
 # 2018-11-24, [CREATE] /form and /push
 #             [CREATE] views
 # 2018-11-25, CHANGED: use USERS.map
+# 2018-12-07, CAN EDIT messages.
 
-VERSION = "0.3.1"
+VERSION = '0.4.3'
 
 require 'sinatra'   # gem install sinatra
 require 'line/bot'  # gem install line-bot-api
@@ -33,10 +34,6 @@ end
 DATA  = DB[:data]
 USERS = DB[:users]
 MSGS  = DB[:msgs]
-
-BASE_URL = "https://bot.kohhoh.jp"
-IMAGES = "public/images"
-
 
 # FIXME: もし、USER を追加したらこれではいけなくなる。
 # staff を作ればどうか？ ishii_kimura_saya でもよい。
@@ -78,6 +75,30 @@ def db_save(name, value)
   DATA.insert(name: name, hb: value, timestamp: Time.now)
 end
 
+#
+# push test
+#
+
+BASE_URL = "https://bot.kohhoh.jp"
+IMAGES = "public/images"
+
+# 2018-12-07
+# ローカルファイル名 = リモートファイル名で、かつ、URL の一部は制限か？
+# データベース用意し、description と id、セーブはタイムスタンプとかでは？
+
+get '/add-receiver' do
+  erb :add_receiver, :layout => :layout
+end
+
+
+post '/add-receiver' do
+  req = params.slice "name", "uid"
+  USERS.insert(name: req["name"], uid: req["uid"])
+
+  @msg = "add receiver."
+  erb :back, :layout => :layout
+end
+
 # 2018-12-01
 get '/upload' do
   @files = []
@@ -99,12 +120,13 @@ post '/upload' do
   redirect "/upload"
 end
 
-
+#
+# receiver
+#
 post '/add-receiver' do
-  req = params.slice "name", "uid"
-  USERS.insert(name: req["name"], uid: req["uid"])
-
-  @msg = "add receiver."
+  req = params.slice 'name', 'uid'
+  USERS.insert(name: req['name'], uid: req['uid'])
+  @msg = "add #{req['name']} as a receiver."
   erb :back, :layout => :layout
 end
 
@@ -112,20 +134,20 @@ get '/add-receiver' do
   erb :add_receiver, :layout => :layout
 end
 
+#
+# message
+#
 
-post '/del-msg' do
-  MSGS.where(:id => params[:id]).update(:stat => false)
-
-  @msg = "deleted."
-  erb :back, :layout => :layout
+get '/msg-select' do
+  @msgs = MSGS.where(stat: true)
+  erb :msg_select, :layout => :layout
 end
 
-get '/del-msg' do
-  @msgs = MSGS.where(:stat => true).all
-  erb :del_msg, :layout => :layout
+get '/msg-add' do
+  erb :msg_add, :layout => :layout
 end
 
-post '/add-msg' do
+post '/msg-add' do
   req = params.slice "comment", "msg"
   MSGS.insert(comment: req["comment"], msg: req["msg"])
 
@@ -133,39 +155,66 @@ post '/add-msg' do
   erb :back, :layout => :layout
 end
 
-get '/add-msg' do
-  erb :add_msg, :layout => :layout
+get '/msg-edit/:id' do
+  @msg = MSGS.where(id: params['id']).first
+
+  erb :msg_edit, :layout => :layout
+end
+
+put '/msg-edit' do
+  msg = params[:msg]
+  MSGS.where(id: params[:id]).update(comment: params[:comment], msg: params[:msg])
+  begin
+    JSON.parse(msg)
+  rescue
+    return "<p>ERROR: 文法エラーがあります。<a href='/msg-edit/#{params[:id]}'>back</a></p>"
+  end
+
+  redirect "/push-test"
+end
+
+delete '/msg-delete' do
+  id = params[:id]
+  MSGS.where(:id => params[:id]).update(stat: false)
+  redirect "/msg-select"
+end
+
+get "/push-test" do
+  not_authentication = authenticate
+  return not_authentication if not_authentication
+
+  @id = params['id']
+  @comment = @id.nil? ? "message not selected" : MSGS.where(id: @id).first[:comment]
+  @users = USERS.all
+  
+  erb :push_test, :layout => :layout
 end
 
 post '/push-test' do
-  req = params.slice 'user','msg'
+  req = params.slice 'user','msg','id'
   if req['user'].nil?
     return "<p>ERROR: receiver が選ばれていない。<a href='/push-test'>back</a></p>"
   end
-  if req['msg'].nil?
+  if req['id'].empty?
     return "<p>ERROR: message が選ばれていない。<a href='/push-test'>back</a></p>"
   end
-  m = MSGS.where(id: req['msg'].to_i).first[:msg]
-  json = JSON.parse(m)
+#  puts "res['id'] = #{req['id']} #{req['id'].empty?}"
+  m = MSGS.where(id: req['id']).first[:msg]
+  begin
+    json = JSON.parse(m)
+  rescue
+    return "<p>ERROR: JSON format error.</p>"
+  end
   req['user'].each do |u|
     uid = USERS.where(id: u).first[:uid]
     client.push_message(uid, json)
   end
-
   @msg="push test done."
+
   erb :back, :layout => :layout
 end
 
-get "/push-test" do
-  # 20181126
-  not_authentication = authenticate
-  return not_authentication if not_authentication
-  #
-  @users = USERS.all
-  @msgs  = MSGS.where(:stat => true).all
 
-  erb :push_test, :layout => :layout
-end
 
 post '/callback' do
   body = request.body.read
