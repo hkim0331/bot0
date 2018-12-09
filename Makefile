@@ -1,6 +1,6 @@
 DB=bot0.sqlite3
 
-start:
+shotgun:
 	shotgun bot0.rb 
 
 stop:

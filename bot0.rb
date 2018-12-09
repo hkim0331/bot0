@@ -162,7 +162,14 @@ get '/msg-edit/:id' do
 end
 
 put '/msg-edit' do
+  msg = params[:msg]
   MSGS.where(id: params[:id]).update(comment: params[:comment], msg: params[:msg])
+  begin
+    JSON.parse(msg)
+  rescue
+    return "<p>ERROR: 文法エラーがあります。<a href='/msg-edit/#{params[:id]}'>back</a></p>"
+  end
+
   redirect "/push-test"
 end
 
